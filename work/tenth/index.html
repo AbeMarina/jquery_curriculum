@@ -26,6 +26,46 @@
     </div>
     <script src="../../common/js/jquery.js"></script>
     <script>
+
+     $(function() {
+      $('.search__btn').on('click',function() {
+        // console.log('hi')
+        console.log($('#js-search-word').val());
+        $.ajax({
+          url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+          type: 'GET',
+          datatype: 'json',
+          data: {
+            applicationId: '1019399324990976605',
+            booksGenreId: '001',
+            page: 1,
+            hits: 20,
+            keyword: $('#js-search-word').val(),
+          },
+        }).done(function(data) {
+          console.log(data);
+          if(data.count > 0) {
+            $.each(data.Items,function(i, Item) {
+              console.log(data.Items[i].Item);
+              $('.lists').append("<img src=" + (data.Items[i].Item.largeImageUrl) + "  class='lists__item__img' alt=''>" ,"<p class='lists__item__detail'>作品名：</p>" + (data.Items[i].Item.title),
+            "<p class='lists__item__detail'>作者：</p>" + (data.Items[i].Item.author),"<p class='lists__item__detail'>出版社：</p>" + (data.Items[i].Item.publisherName))
+            })
+          } else (data.hit === 0) 
+            $('.lists').before("<p>検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。")
+          });
+        }).fail(function(err) {
+          $('.lists').before('<p>通信に失敗しました。<br>インターネットの接続をご確認ください。');
+        })
+
+        // ページャー ページ送り部分
+        var pager = {
+          paramKey: 'page',
+          articleCount: 20,
+          pageMaxCount: 20
+        };
+
+      })
+
       // 楽天ブックスの総合検索APIを使って製作してください。
       // answerの挙動を良く見てね！
       //
