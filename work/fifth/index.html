@@ -91,12 +91,11 @@
           if($value === 'all') {
             $('.list li').show();
           } else {
-            $('.list li').each(function() {
-              var list = $(this);
-              if( list.data('category-type') === $value) {
-                list.show();
+            $('.list li').each(function(i, item) {
+              if( $(item).data('category-type') === $value) {
+                $(item).show();
               } else {
-                list.hide();
+                $(item).hide();
               }
             });
           }
