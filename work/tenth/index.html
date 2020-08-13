@@ -29,9 +29,9 @@
     <script>
 
      $(function() {
-       $('.btn-anchor').click(function(e) {
-        e.preventDefault();
-       });
+      //  $('.btn-anchor').click(function(e) {
+      //   e.preventDefault();
+      //  });
       $('.search__btn').on('click',function() {
           var page = 1;
           $('.lists').children().remove();
@@ -40,7 +40,7 @@
           $('.error').remove();
           getData(page);
       });
-      $('.nextPage').on('click',function(){
+      $('body').on('click','.btn-anchor',function(){
         console.log("aaaaaaaaaaaa");
         var page = 2;
         getData(page);
