@@ -40,10 +40,11 @@
           $('.error').remove();
           getData(page);
       });
-      $('body').on('click','.btn-anchor',function(){
+      $('body').on('click','.btn-anchor',function(e){
         console.log("aaaaaaaaaaaa");
         var page = 2;
         getData(page);
+        e.preventDefault();
       });
 
         function getData(page) {
