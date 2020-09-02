@@ -41,9 +41,10 @@ $(function() {
               console.log("aaaaaaaaaaaa");
               var num = 2;
               var page = num;
+
               getData(page);
               e.preventDefault();//イベントキャンセルするメソッド
-              
+
         });
          
     function getData(page) {
@@ -55,7 +56,7 @@ $(function() {
             applicationId: '1019399324990976605',
             booksGenreId: '001',
             page: page,
-            hits: 1,
+            hits: 20,
             keyword: $('#js-search-word').val(),
           }
         }).done(function(data) {
@@ -120,6 +121,7 @@ $(function() {
         
 
       });
+
 
       // 楽天ブックスの総合検索APIを使って製作してください。
       // answerの挙動を良く見てね！
