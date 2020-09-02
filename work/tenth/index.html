@@ -42,14 +42,22 @@ $(function() {
               $('.lists').empty();
               $('.js-pager').remove();//class削除
               console.log("aaaaaaaaaaaa");
-              num++;
+              num++;//page数を１ずつ増やす
               var page = num;
 
               getData(page);
               e.preventDefault();//イベントキャンセルするメソッド
 
         });
-        
+        $('body').on('click','.disabled',function(e){
+          $('.lists').empty();//リストを一回一回リセットする
+          $('.js-pager').remove();//class削除
+          num--;
+          var page = num;
+          getData(page);
+          e.preventDefault();
+        });
+
          
     function getData(page) {
       $.ajax({
@@ -90,9 +98,10 @@ $(function() {
             }; 
 
             if(data.page === 1) {
-              $('.disabled').css('cursor', 'default');
+              $('.disabled').css('cursor', 'default').css('background-color','#888');
             } else if(data.page === data.pageCount) {
-              $('.page-next').addClass('disabled');
+              // $('.page-next').addClass('disabled');
+              $('.nextPage').css('cursor', 'default').css('background-color','#888');
             };
             
         }).fail(function(err) {
