@@ -37,15 +37,19 @@ $(function() {
       $('.error').remove();
       getData(page);
     });
+       var num = 1;
       $('body').on('click','.nextPage',function(e){
+              $('.lists').empty();
+              $('.js-pager').remove();//class削除
               console.log("aaaaaaaaaaaa");
-              var num = 2;
-              var page = num++;
+              num++;
+              var page = num;
 
               getData(page);
               e.preventDefault();//イベントキャンセルするメソッド
 
         });
+        
          
     function getData(page) {
       $.ajax({
