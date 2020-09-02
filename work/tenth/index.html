@@ -40,7 +40,7 @@ $(function() {
       $('body').on('click','.nextPage',function(e){
               console.log("aaaaaaaaaaaa");
               var num = 2;
-              var page = num;
+              var page = num++;
 
               getData(page);
               e.preventDefault();//イベントキャンセルするメソッド
