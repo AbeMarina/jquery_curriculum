@@ -92,15 +92,16 @@ $(function() {
               $('.text').css('text-align', 'center');
           };
           
-            if(data.count > 20) {
+            if(data.count > 1) {
               console.log('確認');
               $('ul').after('<div class="js-pager"><ul class="btn-wrapper"><li class="prev btn-item"><a class="btn-anchor disabled" data-js="page-prev" href="">前へ</a></li><li class="next btn-item"><a class="btn-anchor nextPage" data-js="page-next" href="">次へ</a></li></ul></div>');
             }; 
 
             if(data.page === 1) {
               $('.disabled').css('cursor', 'default').css('background-color','#888');
+              $('.disabled').css('pointer-events','none');//リンクの無効化
             } else if(data.page === data.pageCount) {
-              // $('.page-next').addClass('disabled');
+              $('.nextPage').addClass('disabled').css('pointer-events','none');;
               $('.nextPage').css('cursor', 'default').css('background-color','#888');
             };
             
