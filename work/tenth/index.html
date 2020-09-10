@@ -52,7 +52,7 @@ $(function() {
         $('body').on('click','.disabled',function(e){
           $('.lists').empty();//リストを一回一回リセットする
           $('.js-pager').remove();//class削除
-          num--;
+          num--;//前へを押したときページを1つ戻る
           var page = num;
           getData(page);
           e.preventDefault();
@@ -68,7 +68,7 @@ $(function() {
             applicationId: '1019399324990976605',
             booksGenreId: '001',
             page: page,
-            hits: 20,
+            hits: 1,
             keyword: $('#js-search-word').val(),
           }
         }).done(function(data) {
@@ -92,28 +92,45 @@ $(function() {
               $('.text').css('text-align', 'center');
           };
           
-            if(data.count >= 1) {//1以上だった場合
+            if(data.count >= 1) {//1以上だった場合ページャを表示
               console.log('確認');
               $('ul').after('<div class="js-pager"><ul class="btn-wrapper"><li class="prev btn-item"><a class="btn-anchor disabled" data-js="page-prev" href="">前へ</a></li><li class="next btn-item"><a class="btn-anchor nextPage" data-js="page-next" href="">次へ</a></li></ul></div>');
             }; 
-
-            if(data.page === 1) {
+            
+            if(data.page === 1) {//1ページ目のとき「前へ」非活性
               $('.disabled').css('cursor', 'default').css('background-color','#888');
               $('.disabled').css('pointer-events','none');//リンクの無効化
-              console.log('check and try');
-            } else if(data.page === data.pageCount) {
-              // $('.nextPage').addClass('disabled').css('pointer-events','none');;
+              console.log('first page');
+            } else if(data.page === data.pageCount) {//最終ページのとき「次へ」非活性
+              $('.disabled').removeClass('.disabled');
               $('.nextPage').css('cursor', 'default').css('background-color','#888');
-            } else{
-              $('.btn-anchor').css('cursor', 'default').css('background-color','#888');
-              console.log('btn-item both not blue');
+              $('.disabled').css('pointer-events','none');
+              console.log('maxpagecount only pageNext color not blue');
+            // }else {
+            //   $('.btn-anchor').removeClass('.disabled');
+            //   $('.btn-anchor').addClass('.btn-item');
             };
             
+            if(data.pageCount === 1) {//聡ページカウントが1ページのときページャ両方を非活性
+              $('.nextPage').css('background-color','#888').css('cursor','default').css('pointer-events','none');
+            }else if(data.page >= 2){
+              $('.btn-anchor').removeClass('.disabled');
+              $('.btn-anchor').addClass('.btn-item');
+            };
+
+            $(function() {//総ページ数入力
+              $('.js-search-button').on('click',function() {
+                $('.counter').show();
+              })
+            })
+
+            //ｈｔｍｌにページャ部分ページ数/総ページ数表示
+            $('.btn-wrapper').before('<div class="counter"><span class="counter-all">' + (data.Items.page) + '</span>' + '/' + '<span class="counter-all">' + (data.Items.pageCount) +'</span>' + '</div>');
+
         }).fail(function(err) {
           var error = "";
           console.log({err})
           switch(err.status) {
-            
             case 400:
               console.log("kakunin");
               $('.lists').before("<p class='text'>検索文字が入力されていません。</p>");
