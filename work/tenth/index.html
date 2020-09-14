@@ -38,7 +38,7 @@ $(function() {
       getData(page);
     });
        var num = 1;
-      $('body').on('click','.nextPage',function(e){
+      $('body').on('click','.next',function(e){
               $('.lists').empty();
               $('.js-pager').remove();//class削除
               console.log("aaaaaaaaaaaa");
@@ -49,7 +49,7 @@ $(function() {
               e.preventDefault();//イベントキャンセルするメソッド
 
         });
-        $('body').on('click','.disabled',function(e){
+        $('body').on('click','.prev',function(e){
           $('.lists').empty();//リストを一回一回リセットする
           $('.js-pager').remove();//class削除
           num--;//前へを押したときページを1つ戻る
@@ -94,22 +94,25 @@ $(function() {
           
             if(data.count >= 1) {//1以上だった場合ページャを表示
               console.log('確認');
-              $('ul').after('<div class="js-pager"><ul class="btn-wrapper"><li class="prev btn-item"><a class="btn-anchor disabled" data-js="page-prev" href="">前へ</a></li><li class="next btn-item"><a class="btn-anchor nextPage" data-js="page-next" href="">次へ</a></li></ul></div>');
+              $('ul').after('<div class="js-pager"><ul class="btn-wrapper"><li class="prev btn-item"><a class="btn-anchor" data-js="page-prev" href="">前へ</a></li><li class="next btn-item"><a class="btn-anchor" data-js="page-next" href="">次へ</a></li></ul></div>');
             }; 
             
+
             if(data.page === 1) {//1ページ目のとき「前へ」非活性
-              $('.disabled').css('cursor', 'default').css('background-color','#888');
-              $('.disabled').css('pointer-events','none');//リンクの無効化
+              $('.prev').css('cursor', 'default').css('background-color','#888');
+              $('.prev').css('pointer-events','none');//リンクの無効化
               console.log('first page');
-            } else if(data.page === data.pageCount) {//最終ページのとき「次へ」非活性
-              $('.disabled').removeClass('.disabled');
-              $('.nextPage').css('cursor', 'default').css('background-color','#888');
-              $('.disabled').css('pointer-events','none');
+            }else if(data.page === data.pageCount || data.pageCount === 1) {//最終ページのとき「次へ」非活性
+              // $('.prev').addClass('.disabled');
+              $('.next').css('cursor', 'default').css('background-color','#888').css('pointer-events','none');
               console.log('maxpagecount only pageNext color not blue');
-            // } else {
-            //   $('.btn-anchor').removeClass('.disabled');
-            //   $('.btn-anchor').addClass('.btn-item');
             };
+
+            if(data.pageCount === 1) {
+              $('.prev').css('cursor', 'default').css('background-color','#888').css('pointer-events','none');//リンクの無効化 
+              $('.next').css('cursor', 'default').css('background-color','#888').css('pointer-events','none');
+            }
+         
             
             
             // if(data.pageCount === page) {//聡ページカウントが1ページのときページャ両方を非活性
