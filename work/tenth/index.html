@@ -95,21 +95,16 @@ $(function() {
           $('ul').after('<div class="js-pager"><ul class="btn-wrapper"><li class="prev btn-item"><a class="btn-anchor" data-js="page-prev" href="">前へ</a></li><li class="next btn-item"><a class="btn-anchor" data-js="page-next" href="">次へ</a></li></ul></div>');
           };
 
-          if(data.page === 1 && data.pageCount ===1) {
-            $('.prev').addClass('.disabled');
+
+          if(data.page === 1) {//1ぺ―ジ目のとき「前へ」非活性
+            $('.prev').addClass('disabled');
+            console.log('prevcheck');
+          }else if(data.page === data.pageCount) {//最終ページのとき「次へ」非活性
+            $('.next').addClass('disabled');
+            console.log('nextcheck');
+          }else{
+            //処理なし
           }
-          // if(data.page === 1) {//1ページ目のとき「前へ」非活性
-          // $('.prev').css('cursor', 'default').css('background-color','#888');
-          // $('.prev').css('pointer-events','none');//リンクの無効化
-          // console.log('first page');
-          // }else if(data.page === data.pageCount || data.pageCount === 1) {//最終ページのとき「次へ」非活性
-          // $('.next').css('cursor', 'default').css('background-color','#888').css('pointer-events','none');
-          // console.log('maxpagecount only pageNext color not blue');
-          // };
-          // if(data.pageCount === 1) {
-          //   $('.prev').css('cursor', 'default').css('background-color','#888').css('pointer-events','none');//リンクの無効化 
-          //   $('.next').css('cursor', 'default').css('background-color','#888').css('pointer-events','none');
-          // }
           
           //ｈｔｍｌにページャ部分ページ数/総ページ数表示
           console.log(data);
@@ -120,32 +115,32 @@ $(function() {
             $('.text').remove();
             switch(err.status) {
               case 0:
-              $('.lists').before("<p class='text'>通信に失敗しました。インターネトの接続をご確認ください。</p>");
-              $('.text').css('text-align', 'center');
+              $('.lists').before("<p class='text'>通信に失敗しました。インターネットの接続をご確認ください。</p>");
+              $('.text').addClass('message');
               break;
               case 400:
               $('.lists').before("<p class='text'>検索文字が入力されていません。</p>");
-              $('.text').css('text-align', 'center');
+              $('.text').addClass('message');
               break;
               case 404:
               $('.lists').before("<p class='text'>データ存在しません。</p>");
-              $('.text').css('text-align', 'center');
+              $('.text').addClass('message');
               break;
               case 429:
               $('.lists').before("<p class='text'>リクエスト過多です。しばらく時間をおいてからお試しください。</p>");
-              $('.text').css('text-align', 'center');
+              $('.text').addClass('message');
               break;
               case 500:
               $('.lists').before("<p class='text'>システムエラーです。しばらく時間をおいてからお試しください。</p>");
-              $('text').css('text-align', 'center');
+              $('.text').addClass('message');
               break;
               case 503:
               $('.lists').before("<p class='text'>ただいまメンテナンス中です。</p>");
-              $('.text').css('text-align', 'center');
+              $('.text').addClass('message');
               break;
               default:
               $('.lists').before("<p class='text'>システムエラー。もう一度やり直してください。</p>");
-              $('.text').css('text-align', 'center');
+              $('.text').addClass('message');
             }
           });
         }
