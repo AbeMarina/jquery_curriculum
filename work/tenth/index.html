@@ -92,19 +92,22 @@ $(function() {
 
           if(data.count >= 1) {//1以上だった場合ページャを表示
           console.log('確認');
-          $('ul').after('<div class="js-pager"><ul class="btn-wrapper"><li class="prev btn-item"><a class="btn-anchor" data-js="page-prev" href="">前へ</a></li><li class="next btn-item"><a class="btn-anchor" data-js="page-next" href="">次へ</a></li></ul></div>');
+          $('ul').after('<div class="js-pager"><ul class="btn-wrapper"><li class=" btn-item"><a class="btn-anchor prev" data-js="page-prev" href="">前へ</a></li><li class="btn-item"><a class="btn-anchor next" data-js="page-next" href="">次へ</a></li></ul></div>');
           };
 
 
-          if(data.page === 1) {//1ぺ―ジ目のとき「前へ」非活性
+          if(data.page === 1 && data.pageCount >= 2) {//1ぺ―ジ目のとき「前へ」非活性
             $('.prev').addClass('disabled');
             console.log('prevcheck');
-          }else if(data.page === data.pageCount) {//最終ページのとき「次へ」非活性
+          }else if(data.page === data.pageCount && data.page >= 2) {//最終ページのとき「次へ」非活性
             $('.next').addClass('disabled');
             console.log('nextcheck');
-          }else{
+          }else if(data.pageCount === 1){
+            $('.btn-anchor').addClass('disabled');
+          }else {
             //処理なし
-          }
+          };
+          
           
           //ｈｔｍｌにページャ部分ページ数/総ページ数表示
           console.log(data);
