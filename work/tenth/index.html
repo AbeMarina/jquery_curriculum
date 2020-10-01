@@ -41,19 +41,18 @@ $(function() {
     $('body').on('click','.next',function(e){
       $('.lists').empty();
       $('.js-pager').remove();//class削除
-      console.log("aaaaaaaaaaaa");
       num++;//page数を１ずつ増やす
       var page = num;
       getData(page);
       e.preventDefault();//イベントキャンセルするメソッド
     });
-    $('body').on('click','.prev',function(e){
+    $('body').on('click','.prev',function(e){//「前へ」クリックしたら動作
       $('.lists').empty();//リストを一回一回リセットする
       $('.js-pager').remove();//class削除
       num--;//前へを押したときページを1つ戻る
       var page = num;
       getData(page);
-      e.preventDefault();
+      e.preventDefault();//イベントキャンセル
     });
       
       function getData(page) {
@@ -73,7 +72,7 @@ $(function() {
           function bookList () {//本の詳細を表示させる関数
             console.log(data);
             if(data.count > 0) {
-              $.each(data.Items,function(i, Item) {
+              $.each(data.Items,function(i, Item) {//本の情報繰り返し
                 $('.lists').append(
                   "<li class='lists__item'>" +
                   "<div class='lists__item__inner'>" +
@@ -86,15 +85,15 @@ $(function() {
                   "</div>" +
                   "</li>");
               })
-              } else if (data.count === 0) {
+              } else if (data.count === 0) {//データヒットしなかった場合の表示
                 $('.text').remove();
                 $('.lists').before("<p class='text'>検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</p>");
-                $('.text').css('text-align', 'center');
+                $('.text').addClass('message');
               };
           }
           bookList();//検索結果の本の詳細を表示させる。
 
-          function pager() {
+          function pager() {//ページャー部分の処理方法
             if(data.count >= 1) {//1以上だった場合ページャを表示
             console.log('確認');
             $('ul').after('<div class="js-pager"><ul class="btn-wrapper"><li class=" btn-item"><a class="btn-anchor prev" data-js="page-prev" href="">前へ</a></li><li class="btn-item"><a class="btn-anchor next" data-js="page-next" href="">次へ</a></li></ul></div>');
@@ -122,7 +121,7 @@ $(function() {
 
           }).fail(function(err) {
 
-            function errMessage() {
+            function errMessage() {//エラーメッセージの関数
               var error = "";
               console.log({err});
               $('.text').remove();
