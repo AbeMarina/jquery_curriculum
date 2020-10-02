@@ -29,32 +29,53 @@
     <script>
 
 $(function() {
+  var num = 1;
   $('.search__btn').on('click',function() {
     var page = 1;
-      $('.lists').children().remove();
-      $('.text').remove();
-      $('.js-pager').remove();
-      $('.error').remove();
-      getData(page);
+    $('.lists').children().remove();
+    $('.text').remove();
+    $('.js-pager').remove();
+    $('.error').remove();
+    getData(page);
   });
-    var num = 1;
-    $('body').on('click','.next',function(e){
-      $('.lists').empty();
-      $('.js-pager').remove();//class削除
-      num++;//page数を１ずつ増やす
-      var page = num;
-      getData(page);
-      e.preventDefault();//イベントキャンセルするメソッド
-    });
-    $('body').on('click','.prev',function(e){//「前へ」クリックしたら動作
-      $('.lists').empty();//リストを一回一回リセットする
-      $('.js-pager').remove();//class削除
-      num--;//前へを押したときページを1つ戻る
-      var page = num;
-      getData(page);
-      e.preventDefault();//イベントキャンセル
-    });
-      
+  $('body').on('click','.next',function(e){
+    $('.lists').empty();
+    $('.js-pager').remove();//class削除
+    num++;//page数を１ずつ増やす
+    var page = num;
+    getData(page);
+    e.preventDefault();//イベントキャンセルするメソッド
+  });
+  $('body').on('click','.prev',function(e){//「前へ」クリックしたら動作
+    $('.lists').empty();//リストを一回一回リセットする
+    $('.js-pager').remove();//class削除
+    num--;//前へを押したときページを1つ戻る
+    var page = num;
+    getData(page);
+    e.preventDefault();//イベントキャンセル
+  });
+  function bookList (data) {//本の詳細を表示させる関数
+    console.log(data);
+    if(data.count > 0) {
+      $.each(data.Items,function(i, Item) {//本の情報繰り返し
+        $('.lists').append(
+          "<li class='lists__item'>" +
+          "<div class='lists__item__inner'>" +
+          "<a href='' class='lists__item__link' target='_blank'>" +
+          "<img src=" + (data.Items[i].Item.largeImageUrl) + " class='lists__item__img' alt=''>" +
+          "<p class='lists__item__detail'>作品名：" + (data.Items[i].Item.title) + "</p>" +
+          "<p class='lists__item__detail'>作者　：" + (data.Items[i].Item.author) + "</p>" +
+          "<p class='lists__item__detail'>出版社：" + (data.Items[i].Item.publisherName) + "</p>" +
+          "</a>" +
+          "</div>" +
+          "</li>");
+      })
+      } else if (data.count === 0) {//データヒットしなかった場合の表示
+        $('.text').remove();
+        $('.lists').before("<p class='text'>検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</p>");
+        $('.text').addClass('message');
+      };
+  }
       function getData(page) {
       $.ajax({
         url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
@@ -68,30 +89,7 @@ $(function() {
           keyword: $('#js-search-word').val(),
         }
         }).done(function(data) {
-
-          function bookList () {//本の詳細を表示させる関数
-            console.log(data);
-            if(data.count > 0) {
-              $.each(data.Items,function(i, Item) {//本の情報繰り返し
-                $('.lists').append(
-                  "<li class='lists__item'>" +
-                  "<div class='lists__item__inner'>" +
-                  "<a href='' class='lists__item__link' target='_blank'>" +
-                  "<img src=" + (data.Items[i].Item.largeImageUrl) + " class='lists__item__img' alt=''>" +
-                  "<p class='lists__item__detail'>作品名：" + (data.Items[i].Item.title) + "</p>" +
-                  "<p class='lists__item__detail'>作者　：" + (data.Items[i].Item.author) + "</p>" +
-                  "<p class='lists__item__detail'>出版社：" + (data.Items[i].Item.publisherName) + "</p>" +
-                  "</a>" +
-                  "</div>" +
-                  "</li>");
-              })
-              } else if (data.count === 0) {//データヒットしなかった場合の表示
-                $('.text').remove();
-                $('.lists').before("<p class='text'>検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</p>");
-                $('.text').addClass('message');
-              };
-          }
-          bookList();//検索結果の本の詳細を表示させる。
+          bookList(data);//検索結果の本の詳細を表示させる。
 
           function pager() {//ページャー部分の処理方法
             if(data.count >= 1) {//1以上だった場合ページャを表示
@@ -122,14 +120,13 @@ $(function() {
           }).fail(function(err) {
 
             function errMessage() {//エラーメッセージの関数
-              var error = "";
+              var errorText = "";
               console.log({err});
               $('.text').remove();
               switch(err.status) {
                 case 0:
-                $('.lists').before("<p class='text'>通信に失敗しました。インターネットの接続をご確認ください。</p>");
-                $('.text').addClass('message');
-                break;
+                  errorText = '通信に失敗しました。インターネットの接続をご確認ください。';
+                  break;
                 case 400:
                 $('.lists').before("<p class='text'>検索文字が入力されていません。</p>");
                 $('.text').addClass('message');
@@ -153,7 +150,9 @@ $(function() {
                 default:
                 $('.lists').before("<p class='text'>システムエラー。もう一度やり直してください。</p>");
                 $('.text').addClass('message');
+                break;
               }
+              $('.lists').before("<p class='message'>" + errorText + "</p>");
             }
             errMessage();//エラーメッセージを表示させる。
           });
